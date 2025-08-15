@@ -1,0 +1,2 @@
+Total parameters: 115914112
+Trainable parameters: 115914112

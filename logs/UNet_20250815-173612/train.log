@@ -1,0 +1,237 @@
+2025-08-15 17:36:12,024 | INFO | Логирование инициализировано.
+2025-08-15 17:36:12,024 | INFO | Log file: /workspace/SISR-acceleration/logs/UNet_20250815-173612/train.log
+2025-08-15 17:36:12,026 | INFO | Torch Profiler включён. Трейсы будут сохранены в: /workspace/SISR-acceleration/logs/UNet_20250815-173612/tb_prof
+2025-08-15 17:36:16,134 | INFO | Note: detected 128 virtual cores but NumExpr set to maximum of 64, check "NUMEXPR_MAX_THREADS" environment variable.
+2025-08-15 17:36:16,134 | INFO | Note: NumExpr detected 128 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 16.
+2025-08-15 17:36:16,134 | INFO | NumExpr defaulting to 16 threads.
+2025-08-15 17:36:16,480 | INFO | TOTAL NOISY IMAGES: 160
+2025-08-15 17:36:16,480 | INFO | TOTAL GROUND TRUTH IMAGES: 160
+2025-08-15 17:36:18,683 | INFO | Dataset загружен из кэша: dataset_57d9c94ddad875fc.pkl.gz
+2025-08-15 17:36:21,639 | INFO | Noisy input shape: (32, 18, 256, 256)
+2025-08-15 17:36:21,639 | INFO | GT shape: (32, 3, 256, 256)
+2025-08-15 17:36:23,743 | INFO | Size of training set: 512
+2025-08-15 17:36:23,743 | INFO | Size of validation set: 64
+2025-08-15 17:36:23,743 | INFO | Size of test set: 64
+2025-08-15 17:36:24,504 | INFO | MODEL:
+UNet(
+  (resize_fnc): Resize(size=(256, 256), interpolation=bilinear, max_size=None, antialias=True)
+  (in_conv1): FirstFeature(
+    (conv): Sequential(
+      (0): Conv2d(18, 128, kernel_size=(1, 1), stride=(1, 1), bias=False)
+      (1): LeakyReLU(negative_slope=0.01)
+    )
+  )
+  (in_conv2): ConvBlock(
+    (conv): Sequential(
+      (0): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (2): LeakyReLU(negative_slope=0.01, inplace=True)
+      (3): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (4): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (5): LeakyReLU(negative_slope=0.01, inplace=True)
+    )
+  )
+  (enc_1): Encoder(
+    (encoder): Sequential(
+      (0): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+      (1): ConvBlock(
+        (conv): Sequential(
+          (0): Conv2d(128, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+          (1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (2): LeakyReLU(negative_slope=0.01, inplace=True)
+          (3): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+          (4): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (5): LeakyReLU(negative_slope=0.01, inplace=True)
+        )
+      )
+    )
+  )
+  (enc_2): Encoder(
+    (encoder): Sequential(
+      (0): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+      (1): ConvBlock(
+        (conv): Sequential(
+          (0): Conv2d(256, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+          (1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (2): LeakyReLU(negative_slope=0.01, inplace=True)
+          (3): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+          (4): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (5): LeakyReLU(negative_slope=0.01, inplace=True)
+        )
+      )
+    )
+  )
+  (enc_3): Encoder(
+    (encoder): Sequential(
+      (0): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+      (1): ConvBlock(
+        (conv): Sequential(
+          (0): Conv2d(512, 1024, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+          (1): BatchNorm2d(1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (2): LeakyReLU(negative_slope=0.01, inplace=True)
+          (3): Conv2d(1024, 1024, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+          (4): BatchNorm2d(1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (5): LeakyReLU(negative_slope=0.01, inplace=True)
+        )
+      )
+    )
+  )
+  (enc_4): Encoder(
+    (encoder): Sequential(
+      (0): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+      (1): ConvBlock(
+        (conv): Sequential(
+          (0): Conv2d(1024, 2048, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+          (1): BatchNorm2d(2048, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (2): LeakyReLU(negative_slope=0.01, inplace=True)
+          (3): Conv2d(2048, 2048, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+          (4): BatchNorm2d(2048, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (5): LeakyReLU(negative_slope=0.01, inplace=True)
+        )
+      )
+    )
+  )
+  (dec_1): Decoder(
+    (conv): Sequential(
+      (0): UpsamplingBilinear2d(scale_factor=2.0, mode='bilinear')
+      (1): Conv2d(2048, 1024, kernel_size=(1, 1), stride=(1, 1), bias=False)
+      (2): BatchNorm2d(1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (3): LeakyReLU(negative_slope=0.01)
+    )
+    (conv_block): ConvBlock(
+      (conv): Sequential(
+        (0): Conv2d(2048, 1024, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (1): BatchNorm2d(1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (2): LeakyReLU(negative_slope=0.01, inplace=True)
+        (3): Conv2d(1024, 1024, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (4): BatchNorm2d(1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (5): LeakyReLU(negative_slope=0.01, inplace=True)
+      )
+    )
+  )
+  (dec_2): Decoder(
+    (conv): Sequential(
+      (0): UpsamplingBilinear2d(scale_factor=2.0, mode='bilinear')
+      (1): Conv2d(1024, 512, kernel_size=(1, 1), stride=(1, 1), bias=False)
+      (2): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (3): LeakyReLU(negative_slope=0.01)
+    )
+    (conv_block): ConvBlock(
+      (conv): Sequential(
+        (0): Conv2d(1024, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (2): LeakyReLU(negative_slope=0.01, inplace=True)
+        (3): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (4): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (5): LeakyReLU(negative_slope=0.01, inplace=True)
+      )
+    )
+  )
+  (dec_3): Decoder(
+    (conv): Sequential(
+      (0): UpsamplingBilinear2d(scale_factor=2.0, mode='bilinear')
+      (1): Conv2d(512, 256, kernel_size=(1, 1), stride=(1, 1), bias=False)
+      (2): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (3): LeakyReLU(negative_slope=0.01)
+    )
+    (conv_block): ConvBlock(
+      (conv): Sequential(
+        (0): Conv2d(512, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (2): LeakyReLU(negative_slope=0.01, inplace=True)
+        (3): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (4): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (5): LeakyReLU(negative_slope=0.01, inplace=True)
+      )
+    )
+  )
+  (dec_4): Decoder(
+    (conv): Sequential(
+      (0): UpsamplingBilinear2d(scale_factor=2.0, mode='bilinear')
+      (1): Conv2d(256, 128, kernel_size=(1, 1), stride=(1, 1), bias=False)
+      (2): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (3): LeakyReLU(negative_slope=0.01)
+    )
+    (conv_block): ConvBlock(
+      (conv): Sequential(
+        (0): Conv2d(256, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (2): LeakyReLU(negative_slope=0.01, inplace=True)
+        (3): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (4): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (5): LeakyReLU(negative_slope=0.01, inplace=True)
+      )
+    )
+  )
+  (out_conv): FinalOutput(
+    (conv): Sequential(
+      (0): Conv2d(128, 3, kernel_size=(1, 1), stride=(1, 1), bias=False)
+      (1): Tanh()
+    )
+  )
+)
+2025-08-15 17:36:24,506 | INFO | Total parameters: 115,914,112
+2025-08-15 17:36:24,506 | INFO | Trainable parameters: 115,914,112
+2025-08-15 17:36:24,513 | INFO | Profiler schedule: wait=1, warmup=1, active=16, repeat=1
+2025-08-15 17:36:59,256 | INFO | ⏱ Epoch 001 duration: 34.75s | total elapsed: 0.58 min
+2025-08-15 17:37:01,731 | WARNING | /workspace/.local/lib/python3.11/site-packages/torchmetrics/utilities/prints.py:70: FutureWarning: Importing `spectral_angle_mapper` from `torchmetrics.functional` was deprecated and will be removed in 2.0. Import `spectral_angle_mapper` from `torchmetrics.image` instead.
+  _future_warning(
+
+2025-08-15 17:37:02,213 | INFO | Epoch 001 | lr=0.001000 | train: loss=83.1880 | val: loss=95.4325, psnr=4.57, ssim=0.3091
+2025-08-15 17:37:03,372 | INFO | Сохранён чекпойнт: best.pth
+2025-08-15 17:37:03,374 | INFO | Profiler schedule: wait=1, warmup=1, active=16, repeat=1
+2025-08-15 17:37:16,167 | INFO | ⏱ Epoch 002 duration: 12.79s | total elapsed: 0.86 min
+2025-08-15 17:37:19,095 | INFO | Epoch 002 | lr=0.001000 | train: loss=76.6106 | val: loss=89.5941, psnr=10.41, ssim=0.4686
+2025-08-15 17:37:20,260 | INFO | Сохранён чекпойнт: best.pth
+2025-08-15 17:37:20,262 | INFO | Profiler schedule: wait=1, warmup=1, active=16, repeat=1
+2025-08-15 17:37:33,050 | INFO | ⏱ Epoch 003 duration: 12.79s | total elapsed: 1.14 min
+2025-08-15 17:37:36,029 | INFO | Epoch 003 | lr=0.001000 | train: loss=75.2815 | val: loss=80.4800, psnr=19.52, ssim=0.7633
+2025-08-15 17:37:37,340 | INFO | Сохранён чекпойнт: best.pth
+2025-08-15 17:37:37,342 | INFO | Profiler schedule: wait=1, warmup=1, active=16, repeat=1
+2025-08-15 17:37:50,168 | INFO | ⏱ Epoch 004 duration: 12.83s | total elapsed: 1.43 min
+2025-08-15 17:37:53,154 | INFO | Epoch 004 | lr=0.001000 | train: loss=75.2025 | val: loss=75.8790, psnr=24.12, ssim=0.8306
+2025-08-15 17:37:54,516 | INFO | Сохранён чекпойнт: best.pth
+2025-08-15 17:37:54,518 | INFO | Profiler schedule: wait=1, warmup=1, active=16, repeat=1
+2025-08-15 17:38:07,185 | INFO | ⏱ Epoch 005 duration: 12.67s | total elapsed: 1.71 min
+2025-08-15 17:38:10,050 | INFO | Epoch 005 | lr=0.001000 | train: loss=73.8657 | val: loss=76.8501, psnr=23.15, ssim=0.8472
+2025-08-15 17:38:10,052 | INFO | Profiler schedule: wait=1, warmup=1, active=16, repeat=1
+2025-08-15 17:38:22,865 | INFO | ⏱ Epoch 006 duration: 12.81s | total elapsed: 1.97 min
+2025-08-15 17:38:25,810 | INFO | Epoch 006 | lr=0.001000 | train: loss=74.5047 | val: loss=82.0198, psnr=17.98, ssim=0.8039
+2025-08-15 17:38:25,812 | INFO | Profiler schedule: wait=1, warmup=1, active=16, repeat=1
+2025-08-15 17:38:38,631 | INFO | ⏱ Epoch 007 duration: 12.82s | total elapsed: 2.24 min
+2025-08-15 17:38:41,707 | INFO | Epoch 007 | lr=0.001000 | train: loss=73.2509 | val: loss=73.4617, psnr=26.54, ssim=0.8595
+2025-08-15 17:38:42,867 | INFO | Сохранён чекпойнт: best.pth
+2025-08-15 17:38:42,869 | INFO | Profiler schedule: wait=1, warmup=1, active=16, repeat=1
+2025-08-15 17:38:55,803 | INFO | ⏱ Epoch 008 duration: 12.93s | total elapsed: 2.52 min
+2025-08-15 17:38:58,635 | INFO | Epoch 008 | lr=0.001000 | train: loss=72.7485 | val: loss=75.5113, psnr=24.49, ssim=0.8680
+2025-08-15 17:38:58,637 | INFO | Profiler schedule: wait=1, warmup=1, active=16, repeat=1
+2025-08-15 17:39:11,488 | INFO | ⏱ Epoch 009 duration: 12.85s | total elapsed: 2.78 min
+2025-08-15 17:39:14,438 | INFO | Epoch 009 | lr=0.001000 | train: loss=73.3615 | val: loss=71.3031, psnr=28.70, ssim=0.8799
+2025-08-15 17:39:15,689 | INFO | Сохранён чекпойнт: best.pth
+2025-08-15 17:39:15,691 | INFO | Profiler schedule: wait=1, warmup=1, active=16, repeat=1
+2025-08-15 17:39:28,346 | INFO | ⏱ Epoch 010 duration: 12.66s | total elapsed: 3.06 min
+2025-08-15 17:39:31,365 | INFO | Epoch 010 | lr=0.001000 | train: loss=73.5663 | val: loss=83.0347, psnr=16.97, ssim=0.7532
+2025-08-15 17:39:31,366 | INFO | Profiler schedule: wait=1, warmup=1, active=16, repeat=1
+2025-08-15 17:39:43,876 | INFO | ⏱ Epoch 011 duration: 12.51s | total elapsed: 3.32 min
+2025-08-15 17:39:46,733 | INFO | Epoch 011 | lr=0.000100 | train: loss=72.4850 | val: loss=69.9996, psnr=30.00, ssim=0.8933
+2025-08-15 17:39:47,995 | INFO | Сохранён чекпойнт: best.pth
+2025-08-15 17:39:47,997 | INFO | Profiler schedule: wait=1, warmup=1, active=16, repeat=1
+2025-08-15 17:40:00,812 | INFO | ⏱ Epoch 012 duration: 12.82s | total elapsed: 3.61 min
+2025-08-15 17:40:03,789 | INFO | Epoch 012 | lr=0.000100 | train: loss=70.8176 | val: loss=68.7726, psnr=31.23, ssim=0.9012
+2025-08-15 17:40:04,992 | INFO | Сохранён чекпойнт: best.pth
+2025-08-15 17:40:04,994 | INFO | Profiler schedule: wait=1, warmup=1, active=16, repeat=1
+2025-08-15 17:40:17,678 | INFO | ⏱ Epoch 013 duration: 12.68s | total elapsed: 3.89 min
+2025-08-15 17:40:20,365 | INFO | Epoch 013 | lr=0.000100 | train: loss=70.4861 | val: loss=69.5767, psnr=30.42, ssim=0.9050
+2025-08-15 17:40:20,367 | INFO | Profiler schedule: wait=1, warmup=1, active=16, repeat=1
+2025-08-15 17:40:33,074 | INFO | ⏱ Epoch 014 duration: 12.71s | total elapsed: 4.14 min
+2025-08-15 17:40:35,958 | INFO | Epoch 014 | lr=0.000100 | train: loss=70.6759 | val: loss=68.5740, psnr=31.43, ssim=0.9069
+2025-08-15 17:40:37,226 | INFO | Сохранён чекпойнт: best.pth
+2025-08-15 17:40:37,228 | INFO | Profiler schedule: wait=1, warmup=1, active=16, repeat=1
+2025-08-15 17:40:50,011 | INFO | ⏱ Epoch 015 duration: 12.78s | total elapsed: 4.43 min
+2025-08-15 17:40:52,941 | INFO | Epoch 015 | lr=0.000100 | train: loss=71.4742 | val: loss=68.5169, psnr=31.48, ssim=0.9105
+2025-08-15 17:40:54,116 | INFO | Сохранён чекпойнт: best.pth
+2025-08-15 17:40:54,118 | INFO | Profiler schedule: wait=1, warmup=1, active=16, repeat=1
+2025-08-15 17:41:06,795 | INFO | ⏱ Epoch 016 duration: 12.68s | total elapsed: 4.70 min
+2025-08-15 17:41:09,722 | INFO | Epoch 016 | lr=0.000100 | train: loss=69.8936 | val: loss=67.6863, psnr=32.31, ssim=0.9094
+2025-08-15 17:41:10,883 | INFO | Сохранён чекпойнт: best.pth
+2025-08-15 17:41:10,884 | INFO | Profiler schedule: wait=1, warmup=1, active=16, repeat=1
