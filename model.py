@@ -3,7 +3,6 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torch.utils.data import Dataset, DataLoader, random_split
 from config import cfg, Config
-from triton_conv import TritonConv2d
 
 class LayerNormFunction(torch.autograd.Function):
     @staticmethod
