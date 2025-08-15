@@ -116,9 +116,9 @@ class NAFBlock(nn.Module):
         return y + x * self.gamma
 
 class HalfUNet(nn.Module):
-    def __init__(self, input_channels=3):
+    def __init__(self, n_channels=3):
         super(HalfUNet, self).__init__()
-        self.initial = nn.Conv2d(input_channels, cfg.filter_val, 1, 1)
+        self.initial = nn.Conv2d(n_channels, cfg.filter_val, 1, 1)
         self.conv1 = nn.Sequential(
             NAFBlock(cfg.filter_val),
             NAFBlock(cfg.filter_val)

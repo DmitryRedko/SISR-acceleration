@@ -27,8 +27,9 @@ class Config:
     best_metric: str = "val_psnr"        
     log_dir: str = "logs"
 
-    model_name: str = "HalfUNet"
+    model_name: str = "UNet"
     run_suffix: str = ""   
 
-
+    enable_profiling: bool = True
+    
 cfg = Config()

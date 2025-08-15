@@ -42,6 +42,22 @@ def setup_logging(run_dir: Path):
 
 log_file = setup_logging(run_dir)
 
+
+# === Torch Profiler settings (configurable via cfg) ===
+# Enable/disable with cfg.enable_profiling (default: False)
+PROFILING_ENABLED = bool(getattr(cfg, "enable_profiling", False))
+# Schedule can be tuned from cfg, defaults are conservative
+PROF_WAIT = int(getattr(cfg, "prof_wait", 1))
+PROF_WARMUP = int(getattr(cfg, "prof_warmup", 1))
+PROF_ACTIVE = int(getattr(cfg, "prof_active", 2))
+PROF_REPEAT = int(getattr(cfg, "prof_repeat", 1))
+PROF_WITH_STACK = bool(getattr(cfg, "prof_with_stack", False))
+
+tb_prof_dir = run_dir / "tb_prof"
+if PROFILING_ENABLED:
+ tb_prof_dir.mkdir(parents=True, exist_ok=True)
+ logging.info(f"Torch Profiler включён. Трейсы будут сохранены в: {tb_prof_dir.resolve()}")
+
 with open(run_dir / "config.json", "w", encoding="utf-8") as f:
     json.dump(asdict(cfg), f, indent=2, ensure_ascii=False)
 
@@ -58,9 +74,17 @@ import torch.nn.functional as F
 from torch.utils.data import DataLoader, random_split
 
 from datamodule import MultiImagePatchesDataset
-from model import HalfUNet
+from models.half_unet import HalfUNet
+from models.unet import UNet
 
 from torchmetrics.functional import structural_similarity_index_measure as tm_ssim
+from torch.profiler import (
+ profile,
+ record_function,
+ ProfilerActivity,
+ schedule as prof_schedule,
+ tensorboard_trace_handler,
+)
 import pickle, gzip, hashlib
 
     
@@ -154,6 +178,36 @@ def load_checkpoint_into(model, ckpt_path, map_location="cpu", strict=True):
         model.load_state_dict(sd, strict=strict)
     return state
 
+class _NullProfiler:
+    def __enter__(self):
+        return self
+    def __exit__(self, exc_type, exc, tb):
+        return False
+    def step(self):
+        pass
+
+
+def make_profiler():
+    """Returns a torch.profiler context or no-op profiler, depending on cfg."""
+    
+    if not PROFILING_ENABLED:
+        return _NullProfiler()
+
+    activities = [ProfilerActivity.CPU]
+
+    if torch.cuda.is_available():
+        activities.append(ProfilerActivity.CUDA)
+
+    return profile(
+        activities=activities,
+        schedule=prof_schedule(wait=PROF_WAIT, warmup=PROF_WARMUP, active=PROF_ACTIVE, repeat=PROF_REPEAT),
+        on_trace_ready=tensorboard_trace_handler(str(tb_prof_dir)),
+        record_shapes=True,
+        profile_memory=True,
+        with_stack=PROF_WITH_STACK,
+        with_modules=True,
+        )
+
 train_size = int(0.8 * len(dataset))
 valid_size = int(0.1 * len(dataset))
 test_size = len(dataset) - train_size - valid_size
@@ -184,7 +238,13 @@ logging.info(f"Size of training set: {len(train_dataset)}")
 logging.info(f"Size of validation set: {len(valid_dataset)}")
 logging.info(f"Size of test set: {len(test_dataset)}")
 
-model = HalfUNet(input_channels=3 * cfg.num_noisy)
+model = None
+if cfg.model_name == "HalfUNet":
+    model = HalfUNet(n_channels=3 * cfg.num_noisy)
+elif cfg.model_name == "UNet":
+    model = UNet(n_channels=3 * cfg.num_noisy)    
+else:
+    raise ValueError("Model not found")
 
 model = model.to(device)
 model.eval()
@@ -213,22 +273,24 @@ def loss_func(pred, target):
 @torch.no_grad()
 def evaluate(model, dataloader, device):
     model.eval()
-    total_loss = total_psnr = total_ssim = 0.0
+    total_loss = torch.zeros((), device=device)
+    total_psnr = torch.zeros((), device=device)
+    total_ssim = torch.zeros((), device=device)
+
     for inputs, targets in dataloader:
-        inputs, targets = inputs.to(device), targets.to(device)
+        inputs  = inputs.to(device, non_blocking=True)
+        targets = targets.to(device, non_blocking=True)
         outputs = model(inputs)
-        loss_val = loss_func(outputs, targets)
-        psnr_val = psnr(outputs, targets)
-        ssim_val = tm_ssim(outputs, targets, data_range=1.0)
-        total_loss += loss_val.item()
-        total_psnr += psnr_val.item()
-        total_ssim += ssim_val.item()
+        total_loss += loss_func(outputs, targets)
+        total_psnr += psnr(outputs, targets)
+        total_ssim += tm_ssim(outputs, targets, data_range=1.0)
+
     n = len(dataloader)
-    return total_loss / n, total_psnr / n, total_ssim / n
+    return (total_loss/n).item(), (total_psnr/n).item(), (total_ssim/n).item()
 
-optimizer = torch.optim.Adam(model.parameters(), lr=cfg.lr)
+
+optimizer = torch.optim.AdamW(model.parameters(), lr=cfg.lr, fused=True)
                 
-
 scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=cfg.step_size, gamma=cfg.gamma)
 
 def unwrap_state_dict(m: nn.Module):
@@ -247,7 +309,7 @@ def save_checkpoint(epoch, model, optimizer, scheduler, best_metric_value, tag):
     torch.save(state, path)
     logging.info(f"Сохранён чекпойнт: {path.name}")
 
-def plot_and_save_curves(epochs, train_loss, val_loss, train_psnr, val_psnr, train_ssim, val_ssim):
+def plot_and_save_curves(epochs, train_loss, val_loss, val_psnr, val_ssim):
     plt.figure(figsize=(6,6))
     plt.plot(epochs, train_loss, label='Train Loss')
     plt.plot(epochs, val_loss, label='Val Loss')
@@ -258,7 +320,6 @@ def plot_and_save_curves(epochs, train_loss, val_loss, train_psnr, val_psnr, tra
     plt.close()
 
     plt.figure(figsize=(6,6))
-    plt.plot(epochs, train_psnr, label='Train PSNR')
     plt.plot(epochs, val_psnr, label='Val PSNR')
     plt.title('PSNR')
     plt.xlabel('Epoch'); plt.ylabel('PSNR (dB)'); plt.legend()
@@ -267,7 +328,6 @@ def plot_and_save_curves(epochs, train_loss, val_loss, train_psnr, val_psnr, tra
     plt.close()
 
     plt.figure(figsize=(6,6))
-    plt.plot(epochs, train_ssim, label='Train SSIM')
     plt.plot(epochs, val_ssim, label='Val SSIM')
     plt.title('SSIM')
     plt.xlabel('Epoch'); plt.ylabel('SSIM'); plt.legend()
@@ -280,63 +340,80 @@ with open(metrics_csv_path, "w", newline="", encoding="utf-8") as f:
     writer = csv.writer(f)
     writer.writerow([
         "epoch", "lr",
-        "train_loss", "train_psnr", "train_ssim",
+        "train_loss",
         "val_loss", "val_psnr", "val_ssim",
         "epoch_time_s", "elapsed_min"
-    ])
+        ])
 
-best_val_metric = -float("inf") if cfg.best_metric in ("val_psnr", "val_ssim") else float("inf")
+best_val_loss = float("inf")
 history = {
-    "train_loss": [], "train_psnr": [], "train_ssim": [],
-    "val_loss": [], "val_psnr": [], "val_ssim": []
+ "train_loss": [],
+ "val_loss": [], "val_psnr": [], "val_ssim": []
 }
 
 cuda_sync()
 train_wall_start = time.perf_counter()
 
+LOG_EVERY = max(1, len(train_loader) // 2)
+
 for epoch in range(1, cfg.num_epochs + 1):
     cuda_sync()
     epoch_start = time.perf_counter()
-    
+
     model.train()
-    total_loss = total_psnr = total_ssim = 0.0
+    total_loss_gpu = torch.zeros((), device=device)
+    run_loss_gpu   = torch.zeros((), device=device)
 
-    pbar = tqdm(enumerate(train_loader), total=len(train_loader), desc=f"Epoch {epoch}/{cfg.num_epochs}")
-    for batch_idx, (inputs, targets) in pbar:
-        inputs, targets = inputs.to(device), targets.to(device)
+    if PROFILING_ENABLED:
+        logging.info(f"Profiler schedule: wait={PROF_WAIT}, warmup={PROF_WARMUP}, active={PROF_ACTIVE}, repeat={PROF_REPEAT}")
 
-        outputs = model(inputs)
-        loss = loss_func(outputs, targets)
-        psnr_val = psnr(outputs, targets)
-        ssim_val = tm_ssim(outputs, targets, data_range=1.0)
+    with make_profiler() as prof:
+        pbar = tqdm(enumerate(train_loader), total=len(train_loader),
+                    desc=f"Epoch {epoch}/{cfg.num_epochs}")
 
-        optimizer.zero_grad(set_to_none=True)
-        loss.backward()
-        optimizer.step()
+        for batch_idx, (inputs, targets) in pbar:
+            with record_function("to_device"):
+                inputs  = inputs.to(device, non_blocking=True)
+                targets = targets.to(device, non_blocking=True)
 
-        total_loss += loss.item()
-        total_psnr += psnr_val.item()
-        total_ssim += ssim_val.item()
+            with record_function("forward"):
+                outputs = model(inputs)
 
-        pbar.set_postfix(loss=f"{loss.item():.3f}", psnr=f"{psnr_val.item():.2f}", ssim=f"{ssim_val.item():.3f}")
+            with record_function("loss"):
+                loss = loss_func(outputs, targets)
 
-    n_train = len(train_loader)
-    avg_loss = total_loss / n_train
-    avg_psnr = total_psnr / n_train
-    avg_ssim = total_ssim / n_train
+            optimizer.zero_grad(set_to_none=True)
+            with record_function("backward"):
+                loss.backward()
+            optimizer.step()
 
+            ld = loss.detach()
+            total_loss_gpu += ld
+            run_loss_gpu   += ld
+            if (batch_idx + 1) % LOG_EVERY == 0:
+                pbar.set_postfix(loss=f"{(run_loss_gpu/LOG_EVERY).item():.3f}")
+                run_loss_gpu.zero_()
+
+            prof.step()
+
+    cuda_sync()
+    epoch_time = time.perf_counter() - epoch_start
+    elapsed_total = time.perf_counter() - train_wall_start
+    logging.info(f"⏱ Epoch {epoch:03d} duration: {epoch_time:.2f}s | total elapsed: {elapsed_total/60:.2f} min")
+
+    n_train  = len(train_loader)
+    avg_loss = (total_loss_gpu / n_train).item()
+        
     val_loss, val_psnr, val_ssim = evaluate(model, valid_loader, device)
 
     current_lr = optimizer.param_groups[0]["lr"]
     logging.info(
         f"Epoch {epoch:03d} | lr={current_lr:.6f} | "
-        f"train: loss={avg_loss:.4f}, psnr={avg_psnr:.2f}, ssim={avg_ssim:.4f} | "
+        f"train: loss={avg_loss:.4f} | "
         f"val: loss={val_loss:.4f}, psnr={val_psnr:.2f}, ssim={val_ssim:.4f}"
-    )
+        )
 
     history["train_loss"].append(avg_loss)
-    history["train_psnr"].append(avg_psnr)
-    history["train_ssim"].append(avg_ssim)
     history["val_loss"].append(val_loss)
     history["val_psnr"].append(val_psnr)
     history["val_ssim"].append(val_ssim)
@@ -344,31 +421,19 @@ for epoch in range(1, cfg.num_epochs + 1):
     scheduler.step()
 
     if cfg.checkpoint_every > 0 and (epoch % cfg.checkpoint_every == 0):
-        save_checkpoint(epoch, model, optimizer, scheduler, best_val_metric, tag=f"epoch_{epoch:03d}")
+        save_checkpoint(epoch, model, optimizer, scheduler, best_val_loss, tag=f"epoch_{epoch:03d}")
 
     current_metric = {"val_psnr": val_psnr, "val_ssim": val_ssim, "val_loss": -val_loss}[cfg.best_metric]
-    if current_metric > best_val_metric:
-        best_val_metric = current_metric
-        save_checkpoint(epoch, model, optimizer, scheduler, best_val_metric, tag="best")
-
-    epochs_range = list(range(1, len(history["train_loss"]) + 1))
-    plot_and_save_curves(
-        epochs_range,
-        history["train_loss"], history["val_loss"],
-        history["train_psnr"], history["val_psnr"],
-        history["train_ssim"], history["val_ssim"]
-    )
     
-    cuda_sync()
-    epoch_time = time.perf_counter() - epoch_start
-    elapsed_total = time.perf_counter() - train_wall_start
-    logging.info(f"⏱ Epoch {epoch:03d} duration: {epoch_time:.2f}s | total elapsed: {elapsed_total/60:.2f} min")
-    
+    if val_loss < best_val_loss:
+        best_val_loss = val_loss
+        save_checkpoint(epoch, model, optimizer, scheduler, best_val_loss, tag="best")
+        
     with open(metrics_csv_path, "a", newline="", encoding="utf-8") as f:
         writer = csv.writer(f)
         writer.writerow([
             epoch, current_lr,
-            avg_loss, avg_psnr, avg_ssim,
+            avg_loss,
             val_loss, val_psnr, val_ssim,
             epoch_time, elapsed_total/60.0
         ])
@@ -378,6 +443,13 @@ total_time = time.perf_counter() - train_wall_start
 avg_epoch_time = total_time / max(1, len(history["train_loss"]))
 logging.info(f"🏁 Total training time: {total_time/60:.2f} min ({total_time:.2f} s) | avg/epoch: {avg_epoch_time:.2f} s")
 print(f"Total training: {total_time/60:.2f} min, avg/epoch: {avg_epoch_time:.2f} s")
+
+epochs_range = list(range(1, len(history["train_loss"]) + 1))
+plot_and_save_curves(
+    epochs_range,
+    history["train_loss"], history["val_loss"],
+    history["val_psnr"], history["val_ssim"]
+    )
 
 torch.cuda.empty_cache()
 
@@ -422,6 +494,7 @@ for batch_idx, (lr_batch, hr_batch) in enumerate(test_loader):
 
 test_loss, test_psnr, test_ssim = evaluate(model, test_loader, device=torch.device("cpu"))
 logging.info(f"TEST | loss={test_loss:.4f}, psnr={test_psnr:.2f}, ssim={test_ssim:.4f}")
+
 with open(run_dir / "test_metrics.json", "w", encoding="utf-8") as f:
     json.dump({"loss": test_loss, "psnr": test_psnr, "ssim": test_ssim}, f, indent=2, ensure_ascii=False)
 
