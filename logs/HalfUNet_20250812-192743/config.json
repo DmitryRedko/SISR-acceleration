@@ -1,0 +1,22 @@
+{
+  "gpus": "0",
+  "seed": 42,
+  "data_root": "SIDD_Small_sRGB_Only",
+  "scene_list_file": "SIDD_Small_sRGB_Only/Scene_Instances.txt",
+  "data_path": "SIDD_Small_sRGB_Only/Data/",
+  "filter_val": 128,
+  "num_noisy": 6,
+  "crop_size": 256,
+  "batch_size": 32,
+  "num_workers": 4,
+  "pin_memory": true,
+  "lr": 0.001,
+  "step_size": 10,
+  "gamma": 0.1,
+  "num_epochs": 100,
+  "checkpoint_every": 0,
+  "best_metric": "val_psnr",
+  "log_dir": "logs",
+  "model_name": "HalfUNet",
+  "run_suffix": ""
+}

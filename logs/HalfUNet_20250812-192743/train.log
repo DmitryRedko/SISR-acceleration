@@ -1,0 +1,354 @@
+2025-08-12 19:27:43,421 | INFO | Логирование инициализировано.
+2025-08-12 19:27:43,422 | INFO | Log file: /workspace/SIDD_TRAIN/sidd_resolution/logs/HalfUNet_20250812-192743/train.log
+2025-08-12 19:27:47,602 | INFO | Note: detected 128 virtual cores but NumExpr set to maximum of 64, check "NUMEXPR_MAX_THREADS" environment variable.
+2025-08-12 19:27:47,602 | INFO | Note: NumExpr detected 128 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 16.
+2025-08-12 19:27:47,602 | INFO | NumExpr defaulting to 16 threads.
+2025-08-12 19:27:48,067 | INFO | TOTAL NOISY IMAGES: 160
+2025-08-12 19:27:48,067 | INFO | TOTAL GROUND TRUTH IMAGES: 160
+2025-08-12 19:27:50,276 | INFO | Dataset загружен из кэша: dataset_57d9c94ddad875fc.pkl.gz
+2025-08-12 19:27:53,161 | INFO | Noisy input shape: (32, 18, 256, 256)
+2025-08-12 19:27:53,161 | INFO | GT shape: (32, 3, 256, 256)
+2025-08-12 19:27:55,369 | INFO | Size of training set: 512
+2025-08-12 19:27:55,370 | INFO | Size of validation set: 64
+2025-08-12 19:27:55,370 | INFO | Size of test set: 64
+2025-08-12 19:27:55,389 | INFO | MODEL:
+HalfUNet(
+  (initial): Conv2d(18, 128, kernel_size=(1, 1), stride=(1, 1))
+  (conv1): Sequential(
+    (0): NAFBlock(
+      (conv1): Conv2d(128, 256, kernel_size=(1, 1), stride=(1, 1))
+      (conv2): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=256)
+      (conv3): Conv2d(128, 128, kernel_size=(1, 1), stride=(1, 1))
+      (sca): Sequential(
+        (0): AdaptiveAvgPool2d(output_size=1)
+        (1): Conv2d(128, 128, kernel_size=(1, 1), stride=(1, 1))
+      )
+      (sg): SimpleGate()
+      (conv4): Conv2d(128, 256, kernel_size=(1, 1), stride=(1, 1))
+      (conv5): Conv2d(128, 128, kernel_size=(1, 1), stride=(1, 1))
+      (norm1): LayerNorm2d()
+      (norm2): LayerNorm2d()
+      (dropout1): Identity()
+      (dropout2): Identity()
+    )
+    (1): NAFBlock(
+      (conv1): Conv2d(128, 256, kernel_size=(1, 1), stride=(1, 1))
+      (conv2): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=256)
+      (conv3): Conv2d(128, 128, kernel_size=(1, 1), stride=(1, 1))
+      (sca): Sequential(
+        (0): AdaptiveAvgPool2d(output_size=1)
+        (1): Conv2d(128, 128, kernel_size=(1, 1), stride=(1, 1))
+      )
+      (sg): SimpleGate()
+      (conv4): Conv2d(128, 256, kernel_size=(1, 1), stride=(1, 1))
+      (conv5): Conv2d(128, 128, kernel_size=(1, 1), stride=(1, 1))
+      (norm1): LayerNorm2d()
+      (norm2): LayerNorm2d()
+      (dropout1): Identity()
+      (dropout2): Identity()
+    )
+  )
+  (pool1): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+  (conv2): Sequential(
+    (0): NAFBlock(
+      (conv1): Conv2d(128, 256, kernel_size=(1, 1), stride=(1, 1))
+      (conv2): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=256)
+      (conv3): Conv2d(128, 128, kernel_size=(1, 1), stride=(1, 1))
+      (sca): Sequential(
+        (0): AdaptiveAvgPool2d(output_size=1)
+        (1): Conv2d(128, 128, kernel_size=(1, 1), stride=(1, 1))
+      )
+      (sg): SimpleGate()
+      (conv4): Conv2d(128, 256, kernel_size=(1, 1), stride=(1, 1))
+      (conv5): Conv2d(128, 128, kernel_size=(1, 1), stride=(1, 1))
+      (norm1): LayerNorm2d()
+      (norm2): LayerNorm2d()
+      (dropout1): Identity()
+      (dropout2): Identity()
+    )
+    (1): NAFBlock(
+      (conv1): Conv2d(128, 256, kernel_size=(1, 1), stride=(1, 1))
+      (conv2): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=256)
+      (conv3): Conv2d(128, 128, kernel_size=(1, 1), stride=(1, 1))
+      (sca): Sequential(
+        (0): AdaptiveAvgPool2d(output_size=1)
+        (1): Conv2d(128, 128, kernel_size=(1, 1), stride=(1, 1))
+      )
+      (sg): SimpleGate()
+      (conv4): Conv2d(128, 256, kernel_size=(1, 1), stride=(1, 1))
+      (conv5): Conv2d(128, 128, kernel_size=(1, 1), stride=(1, 1))
+      (norm1): LayerNorm2d()
+      (norm2): LayerNorm2d()
+      (dropout1): Identity()
+      (dropout2): Identity()
+    )
+  )
+  (pool2): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+  (conv3): Sequential(
+    (0): NAFBlock(
+      (conv1): Conv2d(128, 256, kernel_size=(1, 1), stride=(1, 1))
+      (conv2): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=256)
+      (conv3): Conv2d(128, 128, kernel_size=(1, 1), stride=(1, 1))
+      (sca): Sequential(
+        (0): AdaptiveAvgPool2d(output_size=1)
+        (1): Conv2d(128, 128, kernel_size=(1, 1), stride=(1, 1))
+      )
+      (sg): SimpleGate()
+      (conv4): Conv2d(128, 256, kernel_size=(1, 1), stride=(1, 1))
+      (conv5): Conv2d(128, 128, kernel_size=(1, 1), stride=(1, 1))
+      (norm1): LayerNorm2d()
+      (norm2): LayerNorm2d()
+      (dropout1): Identity()
+      (dropout2): Identity()
+    )
+    (1): NAFBlock(
+      (conv1): Conv2d(128, 256, kernel_size=(1, 1), stride=(1, 1))
+      (conv2): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=256)
+      (conv3): Conv2d(128, 128, kernel_size=(1, 1), stride=(1, 1))
+      (sca): Sequential(
+        (0): AdaptiveAvgPool2d(output_size=1)
+        (1): Conv2d(128, 128, kernel_size=(1, 1), stride=(1, 1))
+      )
+      (sg): SimpleGate()
+      (conv4): Conv2d(128, 256, kernel_size=(1, 1), stride=(1, 1))
+      (conv5): Conv2d(128, 128, kernel_size=(1, 1), stride=(1, 1))
+      (norm1): LayerNorm2d()
+      (norm2): LayerNorm2d()
+      (dropout1): Identity()
+      (dropout2): Identity()
+    )
+  )
+  (conv_up3): Conv2d(128, 2048, kernel_size=(1, 1), stride=(1, 1), bias=False)
+  (up3): PixelShuffle(upscale_factor=4)
+  (conv_up2): Conv2d(128, 512, kernel_size=(1, 1), stride=(1, 1), bias=False)
+  (up2): PixelShuffle(upscale_factor=2)
+  (final_conv): Conv2d(128, 3, kernel_size=(1, 1), stride=(1, 1))
+)
+2025-08-12 19:27:55,391 | INFO | Total parameters: 1,043,971
+2025-08-12 19:27:55,391 | INFO | Trainable parameters: 1,043,971
+2025-08-12 19:27:59,691 | WARNING | /workspace/.local/lib/python3.11/site-packages/torchmetrics/utilities/prints.py:70: FutureWarning: Importing `spectral_angle_mapper` from `torchmetrics.functional` was deprecated and will be removed in 2.0. Import `spectral_angle_mapper` from `torchmetrics.image` instead.
+  _future_warning(
+
+2025-08-12 19:28:12,436 | INFO | Epoch 001 | lr=0.001000 | train: loss=79.7002, psnr=20.30, ssim=0.4338 | val: loss=74.9283, psnr=25.07, ssim=0.6361
+2025-08-12 19:28:12,478 | INFO | Сохранён чекпойнт: best.pth
+2025-08-12 19:28:12,936 | INFO | ⏱ Epoch 001 duration: 17.54s | total elapsed: 0.29 min
+2025-08-12 19:28:26,821 | INFO | Epoch 002 | lr=0.001000 | train: loss=72.9755, psnr=27.02, ssim=0.7240 | val: loss=71.3252, psnr=28.67, ssim=0.7849
+2025-08-12 19:28:26,868 | INFO | Сохранён чекпойнт: best.pth
+2025-08-12 19:28:27,347 | INFO | ⏱ Epoch 002 duration: 14.41s | total elapsed: 0.53 min
+2025-08-12 19:28:41,464 | INFO | Epoch 003 | lr=0.001000 | train: loss=70.6878, psnr=29.31, ssim=0.8038 | val: loss=70.4802, psnr=29.52, ssim=0.7626
+2025-08-12 19:28:41,506 | INFO | Сохранён чекпойнт: best.pth
+2025-08-12 19:28:42,022 | INFO | ⏱ Epoch 003 duration: 14.67s | total elapsed: 0.78 min
+2025-08-12 19:28:56,010 | INFO | Epoch 004 | lr=0.001000 | train: loss=68.9918, psnr=31.01, ssim=0.8369 | val: loss=69.2822, psnr=30.72, ssim=0.8624
+2025-08-12 19:28:56,051 | INFO | Сохранён чекпойнт: best.pth
+2025-08-12 19:28:56,531 | INFO | ⏱ Epoch 004 duration: 14.51s | total elapsed: 1.02 min
+2025-08-12 19:29:10,616 | INFO | Epoch 005 | lr=0.001000 | train: loss=68.0679, psnr=31.93, ssim=0.8740 | val: loss=68.1986, psnr=31.80, ssim=0.8650
+2025-08-12 19:29:10,657 | INFO | Сохранён чекпойнт: best.pth
+2025-08-12 19:29:11,165 | INFO | ⏱ Epoch 005 duration: 14.63s | total elapsed: 1.26 min
+2025-08-12 19:29:24,976 | INFO | Epoch 006 | lr=0.001000 | train: loss=67.9117, psnr=32.09, ssim=0.8939 | val: loss=66.6711, psnr=33.33, ssim=0.8896
+2025-08-12 19:29:25,018 | INFO | Сохранён чекпойнт: best.pth
+2025-08-12 19:29:25,495 | INFO | ⏱ Epoch 006 duration: 14.33s | total elapsed: 1.50 min
+2025-08-12 19:29:39,379 | INFO | Epoch 007 | lr=0.001000 | train: loss=67.1411, psnr=32.86, ssim=0.8997 | val: loss=68.4409, psnr=31.56, ssim=0.8915
+2025-08-12 19:29:39,869 | INFO | ⏱ Epoch 007 duration: 14.37s | total elapsed: 1.74 min
+2025-08-12 19:29:53,945 | INFO | Epoch 008 | lr=0.001000 | train: loss=67.3849, psnr=32.62, ssim=0.9006 | val: loss=68.5796, psnr=31.42, ssim=0.9053
+2025-08-12 19:29:54,444 | INFO | ⏱ Epoch 008 duration: 14.57s | total elapsed: 1.98 min
+2025-08-12 19:30:08,225 | INFO | Epoch 009 | lr=0.001000 | train: loss=66.7733, psnr=33.23, ssim=0.9119 | val: loss=67.6722, psnr=32.33, ssim=0.9093
+2025-08-12 19:30:08,733 | INFO | ⏱ Epoch 009 duration: 14.29s | total elapsed: 2.22 min
+2025-08-12 19:30:22,317 | INFO | Epoch 010 | lr=0.001000 | train: loss=66.1563, psnr=33.84, ssim=0.9189 | val: loss=65.8994, psnr=34.10, ssim=0.9200
+2025-08-12 19:30:22,359 | INFO | Сохранён чекпойнт: best.pth
+2025-08-12 19:30:22,837 | INFO | ⏱ Epoch 010 duration: 14.10s | total elapsed: 2.46 min
+2025-08-12 19:30:36,456 | INFO | Epoch 011 | lr=0.000100 | train: loss=64.6639, psnr=35.34, ssim=0.9249 | val: loss=65.1683, psnr=34.83, ssim=0.9227
+2025-08-12 19:30:36,498 | INFO | Сохранён чекпойнт: best.pth
+2025-08-12 19:30:36,984 | INFO | ⏱ Epoch 011 duration: 14.15s | total elapsed: 2.69 min
+2025-08-12 19:30:50,778 | INFO | Epoch 012 | lr=0.000100 | train: loss=64.3249, psnr=35.68, ssim=0.9248 | val: loss=65.1261, psnr=34.87, ssim=0.9173
+2025-08-12 19:30:50,820 | INFO | Сохранён чекпойнт: best.pth
+2025-08-12 19:30:51,316 | INFO | ⏱ Epoch 012 duration: 14.33s | total elapsed: 2.93 min
+2025-08-12 19:31:05,187 | INFO | Epoch 013 | lr=0.000100 | train: loss=64.1416, psnr=35.86, ssim=0.9276 | val: loss=65.1610, psnr=34.84, ssim=0.9219
+2025-08-12 19:31:05,866 | INFO | ⏱ Epoch 013 duration: 14.55s | total elapsed: 3.17 min
+2025-08-12 19:31:19,940 | INFO | Epoch 014 | lr=0.000100 | train: loss=64.1914, psnr=35.81, ssim=0.9270 | val: loss=64.9749, psnr=35.03, ssim=0.9250
+2025-08-12 19:31:19,982 | INFO | Сохранён чекпойнт: best.pth
+2025-08-12 19:31:20,488 | INFO | ⏱ Epoch 014 duration: 14.62s | total elapsed: 3.42 min
+2025-08-12 19:31:34,481 | INFO | Epoch 015 | lr=0.000100 | train: loss=64.0676, psnr=35.93, ssim=0.9287 | val: loss=64.8514, psnr=35.15, ssim=0.9234
+2025-08-12 19:31:34,523 | INFO | Сохранён чекпойнт: best.pth
+2025-08-12 19:31:35,028 | INFO | ⏱ Epoch 015 duration: 14.54s | total elapsed: 3.66 min
+2025-08-12 19:31:48,591 | INFO | Epoch 016 | lr=0.000100 | train: loss=63.9830, psnr=36.02, ssim=0.9296 | val: loss=64.7186, psnr=35.28, ssim=0.9239
+2025-08-12 19:31:48,633 | INFO | Сохранён чекпойнт: best.pth
+2025-08-12 19:31:49,149 | INFO | ⏱ Epoch 016 duration: 14.12s | total elapsed: 3.90 min
+2025-08-12 19:32:03,013 | INFO | Epoch 017 | lr=0.000100 | train: loss=63.8933, psnr=36.11, ssim=0.9300 | val: loss=64.6102, psnr=35.39, ssim=0.9243
+2025-08-12 19:32:03,054 | INFO | Сохранён чекпойнт: best.pth
+2025-08-12 19:32:03,570 | INFO | ⏱ Epoch 017 duration: 14.42s | total elapsed: 4.14 min
+2025-08-12 19:32:17,654 | INFO | Epoch 018 | lr=0.000100 | train: loss=63.8436, psnr=36.16, ssim=0.9317 | val: loss=64.7030, psnr=35.30, ssim=0.9245
+2025-08-12 19:32:18,167 | INFO | ⏱ Epoch 018 duration: 14.60s | total elapsed: 4.38 min
+2025-08-12 19:32:31,753 | INFO | Epoch 019 | lr=0.000100 | train: loss=63.7263, psnr=36.27, ssim=0.9330 | val: loss=64.7971, psnr=35.20, ssim=0.9286
+2025-08-12 19:32:32,266 | INFO | ⏱ Epoch 019 duration: 14.10s | total elapsed: 4.61 min
+2025-08-12 19:32:45,946 | INFO | Epoch 020 | lr=0.000100 | train: loss=63.7307, psnr=36.27, ssim=0.9324 | val: loss=64.6917, psnr=35.31, ssim=0.9279
+2025-08-12 19:32:46,467 | INFO | ⏱ Epoch 020 duration: 14.20s | total elapsed: 4.85 min
+2025-08-12 19:33:00,577 | INFO | Epoch 021 | lr=0.000010 | train: loss=63.6611, psnr=36.34, ssim=0.9320 | val: loss=64.4995, psnr=35.50, ssim=0.9271
+2025-08-12 19:33:00,619 | INFO | Сохранён чекпойнт: best.pth
+2025-08-12 19:33:01,144 | INFO | ⏱ Epoch 021 duration: 14.68s | total elapsed: 5.10 min
+2025-08-12 19:33:15,003 | INFO | Epoch 022 | lr=0.000010 | train: loss=63.5949, psnr=36.41, ssim=0.9325 | val: loss=64.3018, psnr=35.70, ssim=0.9291
+2025-08-12 19:33:15,044 | INFO | Сохранён чекпойнт: best.pth
+2025-08-12 19:33:15,526 | INFO | ⏱ Epoch 022 duration: 14.38s | total elapsed: 5.34 min
+2025-08-12 19:33:29,147 | INFO | Epoch 023 | lr=0.000010 | train: loss=63.5922, psnr=36.41, ssim=0.9330 | val: loss=64.4744, psnr=35.53, ssim=0.9277
+2025-08-12 19:33:29,635 | INFO | ⏱ Epoch 023 duration: 14.11s | total elapsed: 5.57 min
+2025-08-12 19:33:43,504 | INFO | Epoch 024 | lr=0.000010 | train: loss=63.6004, psnr=36.40, ssim=0.9330 | val: loss=64.5193, psnr=35.48, ssim=0.9256
+2025-08-12 19:33:44,002 | INFO | ⏱ Epoch 024 duration: 14.37s | total elapsed: 5.81 min
+2025-08-12 19:33:58,047 | INFO | Epoch 025 | lr=0.000010 | train: loss=63.6108, psnr=36.39, ssim=0.9326 | val: loss=64.4803, psnr=35.52, ssim=0.9262
+2025-08-12 19:33:58,543 | INFO | ⏱ Epoch 025 duration: 14.54s | total elapsed: 6.05 min
+2025-08-12 19:34:12,531 | INFO | Epoch 026 | lr=0.000010 | train: loss=63.5157, psnr=36.48, ssim=0.9329 | val: loss=64.4610, psnr=35.54, ssim=0.9275
+2025-08-12 19:34:13,029 | INFO | ⏱ Epoch 026 duration: 14.49s | total elapsed: 6.29 min
+2025-08-12 19:34:27,025 | INFO | Epoch 027 | lr=0.000010 | train: loss=63.6084, psnr=36.39, ssim=0.9322 | val: loss=64.3951, psnr=35.60, ssim=0.9290
+2025-08-12 19:34:27,521 | INFO | ⏱ Epoch 027 duration: 14.49s | total elapsed: 6.54 min
+2025-08-12 19:34:41,692 | INFO | Epoch 028 | lr=0.000010 | train: loss=63.5593, psnr=36.44, ssim=0.9324 | val: loss=64.4942, psnr=35.51, ssim=0.9257
+2025-08-12 19:34:42,380 | INFO | ⏱ Epoch 028 duration: 14.86s | total elapsed: 6.78 min
+2025-08-12 19:34:55,788 | INFO | Epoch 029 | lr=0.000010 | train: loss=63.5053, psnr=36.49, ssim=0.9337 | val: loss=64.2287, psnr=35.77, ssim=0.9306
+2025-08-12 19:34:55,829 | INFO | Сохранён чекпойнт: best.pth
+2025-08-12 19:34:56,331 | INFO | ⏱ Epoch 029 duration: 13.95s | total elapsed: 7.02 min
+2025-08-12 19:35:10,319 | INFO | Epoch 030 | lr=0.000010 | train: loss=63.5124, psnr=36.49, ssim=0.9339 | val: loss=64.3032, psnr=35.70, ssim=0.9266
+2025-08-12 19:35:10,826 | INFO | ⏱ Epoch 030 duration: 14.49s | total elapsed: 7.26 min
+2025-08-12 19:35:24,726 | INFO | Epoch 031 | lr=0.000001 | train: loss=63.5339, psnr=36.47, ssim=0.9330 | val: loss=64.3519, psnr=35.65, ssim=0.9276
+2025-08-12 19:35:25,232 | INFO | ⏱ Epoch 031 duration: 14.40s | total elapsed: 7.50 min
+2025-08-12 19:35:39,293 | INFO | Epoch 032 | lr=0.000001 | train: loss=63.5368, psnr=36.46, ssim=0.9329 | val: loss=64.3305, psnr=35.67, ssim=0.9287
+2025-08-12 19:35:39,800 | INFO | ⏱ Epoch 032 duration: 14.57s | total elapsed: 7.74 min
+2025-08-12 19:35:53,615 | INFO | Epoch 033 | lr=0.000001 | train: loss=63.4579, psnr=36.54, ssim=0.9339 | val: loss=64.3205, psnr=35.68, ssim=0.9279
+2025-08-12 19:35:54,123 | INFO | ⏱ Epoch 033 duration: 14.32s | total elapsed: 7.98 min
+2025-08-12 19:36:07,731 | INFO | Epoch 034 | lr=0.000001 | train: loss=63.5448, psnr=36.46, ssim=0.9330 | val: loss=64.5493, psnr=35.45, ssim=0.9276
+2025-08-12 19:36:08,250 | INFO | ⏱ Epoch 034 duration: 14.13s | total elapsed: 8.21 min
+2025-08-12 19:36:21,791 | INFO | Epoch 035 | lr=0.000001 | train: loss=63.5491, psnr=36.45, ssim=0.9332 | val: loss=64.4961, psnr=35.50, ssim=0.9268
+2025-08-12 19:36:22,310 | INFO | ⏱ Epoch 035 duration: 14.06s | total elapsed: 8.45 min
+2025-08-12 19:36:36,012 | INFO | Epoch 036 | lr=0.000001 | train: loss=63.4439, psnr=36.56, ssim=0.9348 | val: loss=64.4534, psnr=35.55, ssim=0.9295
+2025-08-12 19:36:36,533 | INFO | ⏱ Epoch 036 duration: 14.22s | total elapsed: 8.69 min
+2025-08-12 19:36:50,501 | INFO | Epoch 037 | lr=0.000001 | train: loss=63.5078, psnr=36.49, ssim=0.9334 | val: loss=64.3801, psnr=35.62, ssim=0.9263
+2025-08-12 19:36:51,025 | INFO | ⏱ Epoch 037 duration: 14.49s | total elapsed: 8.93 min
+2025-08-12 19:37:04,858 | INFO | Epoch 038 | lr=0.000001 | train: loss=63.5462, psnr=36.45, ssim=0.9327 | val: loss=64.3608, psnr=35.64, ssim=0.9287
+2025-08-12 19:37:05,382 | INFO | ⏱ Epoch 038 duration: 14.36s | total elapsed: 9.17 min
+2025-08-12 19:37:19,427 | INFO | Epoch 039 | lr=0.000001 | train: loss=63.4613, psnr=36.54, ssim=0.9344 | val: loss=64.3995, psnr=35.60, ssim=0.9265
+2025-08-12 19:37:19,962 | INFO | ⏱ Epoch 039 duration: 14.58s | total elapsed: 9.41 min
+2025-08-12 19:37:33,668 | INFO | Epoch 040 | lr=0.000001 | train: loss=63.4768, psnr=36.52, ssim=0.9330 | val: loss=64.3853, psnr=35.61, ssim=0.9269
+2025-08-12 19:37:34,204 | INFO | ⏱ Epoch 040 duration: 14.24s | total elapsed: 9.65 min
+2025-08-12 19:37:48,263 | INFO | Epoch 041 | lr=0.000000 | train: loss=63.4639, psnr=36.54, ssim=0.9337 | val: loss=64.4421, psnr=35.56, ssim=0.9282
+2025-08-12 19:37:48,806 | INFO | ⏱ Epoch 041 duration: 14.60s | total elapsed: 9.89 min
+2025-08-12 19:38:02,621 | INFO | Epoch 042 | lr=0.000000 | train: loss=63.4732, psnr=36.53, ssim=0.9326 | val: loss=64.4438, psnr=35.56, ssim=0.9252
+2025-08-12 19:38:03,113 | INFO | ⏱ Epoch 042 duration: 14.31s | total elapsed: 10.13 min
+2025-08-12 19:38:17,054 | INFO | Epoch 043 | lr=0.000000 | train: loss=63.5114, psnr=36.49, ssim=0.9332 | val: loss=64.3521, psnr=35.65, ssim=0.9291
+2025-08-12 19:38:17,741 | INFO | ⏱ Epoch 043 duration: 14.63s | total elapsed: 10.37 min
+2025-08-12 19:38:31,578 | INFO | Epoch 044 | lr=0.000000 | train: loss=63.5307, psnr=36.47, ssim=0.9331 | val: loss=64.3685, psnr=35.63, ssim=0.9294
+2025-08-12 19:38:32,066 | INFO | ⏱ Epoch 044 duration: 14.32s | total elapsed: 10.61 min
+2025-08-12 19:38:45,481 | INFO | Epoch 045 | lr=0.000000 | train: loss=63.5341, psnr=36.47, ssim=0.9339 | val: loss=64.4647, psnr=35.54, ssim=0.9273
+2025-08-12 19:38:45,971 | INFO | ⏱ Epoch 045 duration: 13.90s | total elapsed: 10.84 min
+2025-08-12 19:38:59,664 | INFO | Epoch 046 | lr=0.000000 | train: loss=63.4754, psnr=36.52, ssim=0.9339 | val: loss=64.2769, psnr=35.72, ssim=0.9263
+2025-08-12 19:39:00,155 | INFO | ⏱ Epoch 046 duration: 14.18s | total elapsed: 11.08 min
+2025-08-12 19:39:14,211 | INFO | Epoch 047 | lr=0.000000 | train: loss=63.5208, psnr=36.48, ssim=0.9330 | val: loss=64.4809, psnr=35.52, ssim=0.9262
+2025-08-12 19:39:14,701 | INFO | ⏱ Epoch 047 duration: 14.55s | total elapsed: 11.32 min
+2025-08-12 19:39:28,364 | INFO | Epoch 048 | lr=0.000000 | train: loss=63.5567, psnr=36.44, ssim=0.9338 | val: loss=64.2935, psnr=35.71, ssim=0.9268
+2025-08-12 19:39:28,866 | INFO | ⏱ Epoch 048 duration: 14.16s | total elapsed: 11.56 min
+2025-08-12 19:39:42,911 | INFO | Epoch 049 | lr=0.000000 | train: loss=63.4771, psnr=36.52, ssim=0.9331 | val: loss=64.3954, psnr=35.60, ssim=0.9283
+2025-08-12 19:39:43,414 | INFO | ⏱ Epoch 049 duration: 14.55s | total elapsed: 11.80 min
+2025-08-12 19:39:57,318 | INFO | Epoch 050 | lr=0.000000 | train: loss=63.5001, psnr=36.50, ssim=0.9338 | val: loss=64.2512, psnr=35.75, ssim=0.9286
+2025-08-12 19:39:57,819 | INFO | ⏱ Epoch 050 duration: 14.40s | total elapsed: 12.04 min
+2025-08-12 19:40:11,780 | INFO | Epoch 051 | lr=0.000000 | train: loss=63.5528, psnr=36.45, ssim=0.9332 | val: loss=64.5195, psnr=35.48, ssim=0.9266
+2025-08-12 19:40:12,281 | INFO | ⏱ Epoch 051 duration: 14.46s | total elapsed: 12.28 min
+2025-08-12 19:40:26,277 | INFO | Epoch 052 | lr=0.000000 | train: loss=63.5052, psnr=36.49, ssim=0.9333 | val: loss=64.4144, psnr=35.59, ssim=0.9261
+2025-08-12 19:40:26,781 | INFO | ⏱ Epoch 052 duration: 14.50s | total elapsed: 12.52 min
+2025-08-12 19:40:40,965 | INFO | Epoch 053 | lr=0.000000 | train: loss=63.5414, psnr=36.46, ssim=0.9332 | val: loss=64.5246, psnr=35.48, ssim=0.9253
+2025-08-12 19:40:41,468 | INFO | ⏱ Epoch 053 duration: 14.69s | total elapsed: 12.77 min
+2025-08-12 19:40:55,436 | INFO | Epoch 054 | lr=0.000000 | train: loss=63.4970, psnr=36.50, ssim=0.9337 | val: loss=64.3984, psnr=35.60, ssim=0.9271
+2025-08-12 19:40:55,945 | INFO | ⏱ Epoch 054 duration: 14.48s | total elapsed: 13.01 min
+2025-08-12 19:41:09,638 | INFO | Epoch 055 | lr=0.000000 | train: loss=63.5059, psnr=36.49, ssim=0.9340 | val: loss=64.5885, psnr=35.41, ssim=0.9244
+2025-08-12 19:41:10,150 | INFO | ⏱ Epoch 055 duration: 14.20s | total elapsed: 13.25 min
+2025-08-12 19:41:24,519 | INFO | Epoch 056 | lr=0.000000 | train: loss=63.5902, psnr=36.41, ssim=0.9322 | val: loss=64.2955, psnr=35.70, ssim=0.9270
+2025-08-12 19:41:25,023 | INFO | ⏱ Epoch 056 duration: 14.87s | total elapsed: 13.49 min
+2025-08-12 19:41:38,866 | INFO | Epoch 057 | lr=0.000000 | train: loss=63.4956, psnr=36.50, ssim=0.9343 | val: loss=64.2856, psnr=35.71, ssim=0.9290
+2025-08-12 19:41:39,372 | INFO | ⏱ Epoch 057 duration: 14.35s | total elapsed: 13.73 min
+2025-08-12 19:41:53,300 | INFO | Epoch 058 | lr=0.000000 | train: loss=63.4936, psnr=36.51, ssim=0.9338 | val: loss=64.3207, psnr=35.68, ssim=0.9282
+2025-08-12 19:41:53,818 | INFO | ⏱ Epoch 058 duration: 14.45s | total elapsed: 13.97 min
+2025-08-12 19:42:07,984 | INFO | Epoch 059 | lr=0.000000 | train: loss=63.5527, psnr=36.45, ssim=0.9325 | val: loss=64.3108, psnr=35.69, ssim=0.9278
+2025-08-12 19:42:08,501 | INFO | ⏱ Epoch 059 duration: 14.68s | total elapsed: 14.22 min
+2025-08-12 19:42:22,287 | INFO | Epoch 060 | lr=0.000000 | train: loss=63.5364, psnr=36.46, ssim=0.9330 | val: loss=64.3565, psnr=35.64, ssim=0.9275
+2025-08-12 19:42:23,004 | INFO | ⏱ Epoch 060 duration: 14.50s | total elapsed: 14.46 min
+2025-08-12 19:42:36,772 | INFO | Epoch 061 | lr=0.000000 | train: loss=63.4686, psnr=36.53, ssim=0.9336 | val: loss=64.3813, psnr=35.62, ssim=0.9294
+2025-08-12 19:42:37,284 | INFO | ⏱ Epoch 061 duration: 14.28s | total elapsed: 14.70 min
+2025-08-12 19:42:51,117 | INFO | Epoch 062 | lr=0.000000 | train: loss=63.4487, psnr=36.55, ssim=0.9334 | val: loss=64.2124, psnr=35.79, ssim=0.9301
+2025-08-12 19:42:51,161 | INFO | Сохранён чекпойнт: best.pth
+2025-08-12 19:42:51,672 | INFO | ⏱ Epoch 062 duration: 14.39s | total elapsed: 14.94 min
+2025-08-12 19:43:05,625 | INFO | Epoch 063 | lr=0.000000 | train: loss=63.4743, psnr=36.53, ssim=0.9344 | val: loss=64.5434, psnr=35.46, ssim=0.9243
+2025-08-12 19:43:06,133 | INFO | ⏱ Epoch 063 duration: 14.46s | total elapsed: 15.18 min
+2025-08-12 19:43:19,922 | INFO | Epoch 064 | lr=0.000000 | train: loss=63.5734, psnr=36.43, ssim=0.9333 | val: loss=64.4162, psnr=35.58, ssim=0.9281
+2025-08-12 19:43:20,428 | INFO | ⏱ Epoch 064 duration: 14.29s | total elapsed: 15.42 min
+2025-08-12 19:43:34,427 | INFO | Epoch 065 | lr=0.000000 | train: loss=63.6458, psnr=36.35, ssim=0.9323 | val: loss=64.3760, psnr=35.62, ssim=0.9284
+2025-08-12 19:43:34,932 | INFO | ⏱ Epoch 065 duration: 14.50s | total elapsed: 15.66 min
+2025-08-12 19:43:49,145 | INFO | Epoch 066 | lr=0.000000 | train: loss=63.4955, psnr=36.50, ssim=0.9326 | val: loss=64.5842, psnr=35.42, ssim=0.9261
+2025-08-12 19:43:49,653 | INFO | ⏱ Epoch 066 duration: 14.72s | total elapsed: 15.90 min
+2025-08-12 19:44:03,491 | INFO | Epoch 067 | lr=0.000000 | train: loss=63.4938, psnr=36.51, ssim=0.9334 | val: loss=64.4785, psnr=35.52, ssim=0.9258
+2025-08-12 19:44:04,008 | INFO | ⏱ Epoch 067 duration: 14.35s | total elapsed: 16.14 min
+2025-08-12 19:44:18,026 | INFO | Epoch 068 | lr=0.000000 | train: loss=63.4658, psnr=36.53, ssim=0.9337 | val: loss=64.3974, psnr=35.60, ssim=0.9269
+2025-08-12 19:44:18,547 | INFO | ⏱ Epoch 068 duration: 14.54s | total elapsed: 16.39 min
+2025-08-12 19:44:32,653 | INFO | Epoch 069 | lr=0.000000 | train: loss=63.5384, psnr=36.46, ssim=0.9329 | val: loss=64.5403, psnr=35.46, ssim=0.9280
+2025-08-12 19:44:33,175 | INFO | ⏱ Epoch 069 duration: 14.63s | total elapsed: 16.63 min
+2025-08-12 19:44:46,902 | INFO | Epoch 070 | lr=0.000000 | train: loss=63.5276, psnr=36.47, ssim=0.9334 | val: loss=64.4450, psnr=35.56, ssim=0.9285
+2025-08-12 19:44:47,426 | INFO | ⏱ Epoch 070 duration: 14.25s | total elapsed: 16.87 min
+2025-08-12 19:45:01,248 | INFO | Epoch 071 | lr=0.000000 | train: loss=63.4904, psnr=36.51, ssim=0.9335 | val: loss=64.4910, psnr=35.51, ssim=0.9271
+2025-08-12 19:45:01,770 | INFO | ⏱ Epoch 071 duration: 14.34s | total elapsed: 17.11 min
+2025-08-12 19:45:15,608 | INFO | Epoch 072 | lr=0.000000 | train: loss=63.3822, psnr=36.62, ssim=0.9337 | val: loss=64.2750, psnr=35.72, ssim=0.9290
+2025-08-12 19:45:16,132 | INFO | ⏱ Epoch 072 duration: 14.36s | total elapsed: 17.35 min
+2025-08-12 19:45:30,063 | INFO | Epoch 073 | lr=0.000000 | train: loss=63.4461, psnr=36.55, ssim=0.9336 | val: loss=64.4282, psnr=35.57, ssim=0.9236
+2025-08-12 19:45:30,587 | INFO | ⏱ Epoch 073 duration: 14.45s | total elapsed: 17.59 min
+2025-08-12 19:45:44,444 | INFO | Epoch 074 | lr=0.000000 | train: loss=63.4727, psnr=36.53, ssim=0.9330 | val: loss=64.3023, psnr=35.70, ssim=0.9279
+2025-08-12 19:45:44,968 | INFO | ⏱ Epoch 074 duration: 14.38s | total elapsed: 17.83 min
+2025-08-12 19:45:58,575 | INFO | Epoch 075 | lr=0.000000 | train: loss=63.4361, psnr=36.56, ssim=0.9343 | val: loss=64.2876, psnr=35.71, ssim=0.9284
+2025-08-12 19:45:59,095 | INFO | ⏱ Epoch 075 duration: 14.13s | total elapsed: 18.06 min
+2025-08-12 19:46:12,718 | INFO | Epoch 076 | lr=0.000000 | train: loss=63.4757, psnr=36.52, ssim=0.9342 | val: loss=64.3139, psnr=35.69, ssim=0.9288
+2025-08-12 19:46:13,433 | INFO | ⏱ Epoch 076 duration: 14.34s | total elapsed: 18.30 min
+2025-08-12 19:46:27,760 | INFO | Epoch 077 | lr=0.000000 | train: loss=63.4851, psnr=36.51, ssim=0.9339 | val: loss=64.6031, psnr=35.40, ssim=0.9226
+2025-08-12 19:46:28,290 | INFO | ⏱ Epoch 077 duration: 14.86s | total elapsed: 18.55 min
+2025-08-12 19:46:42,107 | INFO | Epoch 078 | lr=0.000000 | train: loss=63.4864, psnr=36.51, ssim=0.9332 | val: loss=64.3950, psnr=35.61, ssim=0.9273
+2025-08-12 19:46:42,635 | INFO | ⏱ Epoch 078 duration: 14.34s | total elapsed: 18.79 min
+2025-08-12 19:46:56,234 | INFO | Epoch 079 | lr=0.000000 | train: loss=63.4953, psnr=36.50, ssim=0.9333 | val: loss=64.4097, psnr=35.59, ssim=0.9288
+2025-08-12 19:46:56,762 | INFO | ⏱ Epoch 079 duration: 14.13s | total elapsed: 19.02 min
+2025-08-12 19:47:10,287 | INFO | Epoch 080 | lr=0.000000 | train: loss=63.4767, psnr=36.52, ssim=0.9334 | val: loss=64.4483, psnr=35.55, ssim=0.9287
+2025-08-12 19:47:10,816 | INFO | ⏱ Epoch 080 duration: 14.05s | total elapsed: 19.26 min
+2025-08-12 19:47:24,814 | INFO | Epoch 081 | lr=0.000000 | train: loss=63.5669, psnr=36.43, ssim=0.9320 | val: loss=64.2566, psnr=35.74, ssim=0.9291
+2025-08-12 19:47:25,344 | INFO | ⏱ Epoch 081 duration: 14.53s | total elapsed: 19.50 min
+2025-08-12 19:47:39,302 | INFO | Epoch 082 | lr=0.000000 | train: loss=63.5522, psnr=36.45, ssim=0.9333 | val: loss=64.3273, psnr=35.67, ssim=0.9293
+2025-08-12 19:47:39,828 | INFO | ⏱ Epoch 082 duration: 14.48s | total elapsed: 19.74 min
+2025-08-12 19:47:53,824 | INFO | Epoch 083 | lr=0.000000 | train: loss=63.4105, psnr=36.59, ssim=0.9338 | val: loss=64.4405, psnr=35.56, ssim=0.9283
+2025-08-12 19:47:54,315 | INFO | ⏱ Epoch 083 duration: 14.49s | total elapsed: 19.98 min
+2025-08-12 19:48:08,254 | INFO | Epoch 084 | lr=0.000000 | train: loss=63.5020, psnr=36.50, ssim=0.9334 | val: loss=64.4328, psnr=35.57, ssim=0.9272
+2025-08-12 19:48:08,746 | INFO | ⏱ Epoch 084 duration: 14.43s | total elapsed: 20.22 min
+2025-08-12 19:48:22,652 | INFO | Epoch 085 | lr=0.000000 | train: loss=63.4976, psnr=36.50, ssim=0.9340 | val: loss=64.5046, psnr=35.50, ssim=0.9246
+2025-08-12 19:48:23,154 | INFO | ⏱ Epoch 085 duration: 14.41s | total elapsed: 20.46 min
+2025-08-12 19:48:37,124 | INFO | Epoch 086 | lr=0.000000 | train: loss=63.5151, psnr=36.48, ssim=0.9339 | val: loss=64.2432, psnr=35.76, ssim=0.9282
+2025-08-12 19:48:37,620 | INFO | ⏱ Epoch 086 duration: 14.47s | total elapsed: 20.70 min
+2025-08-12 19:48:51,792 | INFO | Epoch 087 | lr=0.000000 | train: loss=63.4930, psnr=36.51, ssim=0.9334 | val: loss=64.4861, psnr=35.51, ssim=0.9264
+2025-08-12 19:48:52,287 | INFO | ⏱ Epoch 087 duration: 14.67s | total elapsed: 20.95 min
+2025-08-12 19:49:06,069 | INFO | Epoch 088 | lr=0.000000 | train: loss=63.5155, psnr=36.48, ssim=0.9339 | val: loss=64.5043, psnr=35.50, ssim=0.9296
+2025-08-12 19:49:06,566 | INFO | ⏱ Epoch 088 duration: 14.28s | total elapsed: 21.19 min
+2025-08-12 19:49:20,668 | INFO | Epoch 089 | lr=0.000000 | train: loss=63.4566, psnr=36.54, ssim=0.9337 | val: loss=64.3375, psnr=35.66, ssim=0.9284
+2025-08-12 19:49:21,163 | INFO | ⏱ Epoch 089 duration: 14.60s | total elapsed: 21.43 min
+2025-08-12 19:49:35,141 | INFO | Epoch 090 | lr=0.000000 | train: loss=63.4938, psnr=36.51, ssim=0.9332 | val: loss=64.4154, psnr=35.58, ssim=0.9285
+2025-08-12 19:49:35,636 | INFO | ⏱ Epoch 090 duration: 14.47s | total elapsed: 21.67 min
+2025-08-12 19:49:49,808 | INFO | Epoch 091 | lr=0.000000 | train: loss=63.5258, psnr=36.47, ssim=0.9332 | val: loss=64.2658, psnr=35.73, ssim=0.9286
+2025-08-12 19:49:50,495 | INFO | ⏱ Epoch 091 duration: 14.86s | total elapsed: 21.92 min
+2025-08-12 19:50:04,507 | INFO | Epoch 092 | lr=0.000000 | train: loss=63.5360, psnr=36.46, ssim=0.9329 | val: loss=64.4462, psnr=35.55, ssim=0.9266
+2025-08-12 19:50:04,999 | INFO | ⏱ Epoch 092 duration: 14.50s | total elapsed: 22.16 min
+2025-08-12 19:50:18,977 | INFO | Epoch 093 | lr=0.000000 | train: loss=63.5014, psnr=36.50, ssim=0.9332 | val: loss=64.4774, psnr=35.52, ssim=0.9250
+2025-08-12 19:50:19,468 | INFO | ⏱ Epoch 093 duration: 14.47s | total elapsed: 22.40 min
+2025-08-12 19:50:33,504 | INFO | Epoch 094 | lr=0.000000 | train: loss=63.5375, psnr=36.46, ssim=0.9330 | val: loss=64.3060, psnr=35.69, ssim=0.9279
+2025-08-12 19:50:33,993 | INFO | ⏱ Epoch 094 duration: 14.52s | total elapsed: 22.64 min
+2025-08-12 19:50:48,157 | INFO | Epoch 095 | lr=0.000000 | train: loss=63.5015, psnr=36.50, ssim=0.9335 | val: loss=64.3443, psnr=35.66, ssim=0.9264
+2025-08-12 19:50:48,647 | INFO | ⏱ Epoch 095 duration: 14.65s | total elapsed: 22.89 min
+2025-08-12 19:51:02,510 | INFO | Epoch 096 | lr=0.000000 | train: loss=63.5285, psnr=36.47, ssim=0.9338 | val: loss=64.4607, psnr=35.54, ssim=0.9264
+2025-08-12 19:51:03,012 | INFO | ⏱ Epoch 096 duration: 14.36s | total elapsed: 23.13 min
+2025-08-12 19:51:16,775 | INFO | Epoch 097 | lr=0.000000 | train: loss=63.4916, psnr=36.51, ssim=0.9333 | val: loss=64.1601, psnr=35.84, ssim=0.9297
+2025-08-12 19:51:16,817 | INFO | Сохранён чекпойнт: best.pth
+2025-08-12 19:51:17,318 | INFO | ⏱ Epoch 097 duration: 14.31s | total elapsed: 23.37 min
+2025-08-12 19:51:31,262 | INFO | Epoch 098 | lr=0.000000 | train: loss=63.4291, psnr=36.57, ssim=0.9345 | val: loss=64.3981, psnr=35.60, ssim=0.9277
+2025-08-12 19:51:31,765 | INFO | ⏱ Epoch 098 duration: 14.45s | total elapsed: 23.61 min
+2025-08-12 19:51:45,567 | INFO | Epoch 099 | lr=0.000000 | train: loss=63.5485, psnr=36.45, ssim=0.9329 | val: loss=64.3475, psnr=35.65, ssim=0.9307
+2025-08-12 19:51:46,071 | INFO | ⏱ Epoch 099 duration: 14.31s | total elapsed: 23.84 min
+2025-08-12 19:51:59,772 | INFO | Epoch 100 | lr=0.000000 | train: loss=63.4915, psnr=36.51, ssim=0.9333 | val: loss=64.2232, psnr=35.78, ssim=0.9285
+2025-08-12 19:52:00,277 | INFO | ⏱ Epoch 100 duration: 14.20s | total elapsed: 24.08 min
+2025-08-12 19:52:00,277 | INFO | 🏁 Total training time: 24.08 min (1444.88 s) | avg/epoch: 14.45 s
+2025-08-12 19:52:00,374 | INFO | Загружен лучший чекпойнт: best.pth
+2025-08-12 19:52:13,453 | INFO | Сохранён пример предсказаний: test_batch_000.png
+2025-08-12 19:52:24,254 | INFO | Сохранён пример предсказаний: test_batch_001.png
+2025-08-12 19:52:39,763 | INFO | TEST | loss=62.3282, psnr=37.67, ssim=0.9451
